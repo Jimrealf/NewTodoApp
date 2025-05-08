@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList, SafeAreaView } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
 
 interface Todo {
   id: string;
@@ -17,7 +18,7 @@ export default function App() {
     if (inputText.trim()) {
 
       const newTodo: Todo = {
-        id: Math.random().toString(),
+        id: uuidv4(),
         text: inputText,
         done: false,
       };
