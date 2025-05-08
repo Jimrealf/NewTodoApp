@@ -1,14 +1,28 @@
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList, SafeAreaView } from 'react-native';
 
+interface Todo {
+  id: string;
+  text: string;
+  done: boolean;
+}
+
 export default function App() {
 
   const [inputText, setInputText] = useState<string>('');
-  const [todos, setTodos] = useState<string[]>([]);
+  const [todos, setTodos] = useState<Todo[]>([]);
 
   const addTodo = () => {
+
     if (inputText.trim()) {
-      setTodos([...todos, inputText]);
+
+      const newTodo: Todo = {
+        id: Math.random().toString(),
+        text: inputText,
+        done: false,
+      };
+
+      setTodos([...todos, newTodo]);
       setInputText('');
     }
   }
@@ -23,7 +37,7 @@ export default function App() {
 
       <Button title='Add Task' onPress={addTodo} />
 
-      <FlatList data={todos} renderItem={({ item }) => <Text style={styles.todo}>{ item }</Text>} keyExtractor={(_item, index) => index.toString()} />
+      <FlatList data={todos} renderItem={({ item }) => <Text style={styles.todo}>{ item.text }</Text>} keyExtractor={(item) => item.id} />
     </SafeAreaView>
   );
 }
@@ -39,6 +53,7 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
+    color: 'red',
   },
 
   input: {
@@ -50,5 +65,6 @@ const styles = StyleSheet.create({
   todo: {
     fontSize: 18,
     marginVertical: 5,
+    color: 'yellow',
   }
 });
