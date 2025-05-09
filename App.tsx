@@ -2,6 +2,7 @@ import 'react-native-get-random-values';
 import React, { useState } from 'react';
 import { StyleSheet, Text, View, TextInput, Button, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
 import { v4 as uuidv4 } from 'uuid';
+import TodoItem from './components/TodoItem';
 
 interface Todo {
   id: string;
@@ -44,11 +45,7 @@ export default function App() {
       <Button title='Add Task' onPress={addTodo} />
 
       <FlatList data={todos} renderItem={({ item }) => (
-        <TouchableOpacity onPress={() => toggleTodo(item.id)}>
-
-          <Text style={[styles.todo, item.done && styles.todoDone,]}>{item.text}</Text>
-
-        </TouchableOpacity>
+        <TodoItem todo={item} onToggle={toggleTodo} />
       )} keyExtractor={(item) => item.id}
       />
 
@@ -74,16 +71,4 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-
-  todo: {
-    fontSize: 18,
-    marginVertical: 5,
-  },
-
-  todoDone: {
-    textDecorationLine: 'line-through',
-    textDecorationColor: 'green',
-    textDecorationStyle: "double",
-    color: 'gray',
-  }
 });
