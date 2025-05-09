@@ -1,5 +1,8 @@
+import 'react-native-get-random-values';
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TextInput, Button, FlatList, SafeAreaView } from 'react-native';
+import { StyleSheet, Text, View, TextInput, Button, FlatList, SafeAreaView, TouchableOpacity } from 'react-native';
+import { v4 as uuidv4 } from 'uuid';
+import TodoItem from './components/TodoItem';
 
 interface Todo {
   id: string;
@@ -17,7 +20,7 @@ export default function App() {
     if (inputText.trim()) {
 
       const newTodo: Todo = {
-        id: Math.random().toString(),
+        id: uuidv4(),
         text: inputText,
         done: false,
       };
@@ -25,7 +28,11 @@ export default function App() {
       setTodos([...todos, newTodo]);
       setInputText('');
     }
-  }
+  };
+
+  const toggleTodo = (id: string) => {
+    setTodos(todos.map((todo) => todo.id === id ? { ...todo, done: !todo.done } : todo));
+  };
 
 
   return (
@@ -37,7 +44,11 @@ export default function App() {
 
       <Button title='Add Task' onPress={addTodo} />
 
-      <FlatList data={todos} renderItem={({ item }) => <Text style={styles.todo}>{ item.text }</Text>} keyExtractor={(item) => item.id} />
+      <FlatList data={todos} renderItem={({ item }) => (
+        <TodoItem todo={item} onToggle={toggleTodo} />
+      )} keyExtractor={(item) => item.id}
+      />
+
     </SafeAreaView>
   );
 }
@@ -53,7 +64,6 @@ const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginBottom: 20,
-    color: 'red',
   },
 
   input: {
@@ -61,10 +71,4 @@ const styles = StyleSheet.create({
     padding: 10,
     marginBottom: 10,
   },
-
-  todo: {
-    fontSize: 18,
-    marginVertical: 5,
-    color: 'yellow',
-  }
 });
